@@ -1,8 +1,11 @@
 package com.sandeep.example.sandeep.files.service;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 import com.sandeep.example.sandeep.files.dto.FileEventData;
 import com.sandeep.example.sandeep.files.dto.FileUploadStatus;
 import com.sandeep.example.sandeep.files.entity.FileDetail.FileDetail;
+
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -13,12 +16,14 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static java.util.Arrays.sort;
 
 @Service
 public class FileService {
+
+
     String destDir = "/opt/tmp/output";
     private static final int BUFFER_SIZE = 4096;
+
     public FileUploadStatus extractZip(String zipFilePath) throws IOException {
         FileUploadStatus fileUploadStatus =
                 FileUploadStatus.builder().status("success").build();
@@ -28,7 +33,7 @@ public class FileService {
 
     public List<FileDetail> readExtractedFiles() throws IOException {
         List<FileDetail> fileDetailList = new ArrayList<>();
-        File folderToSearch = new File(destDir+"/inputFiles");
+        File folderToSearch = new File(destDir + "/inputFiles");
 
         File[] inputFiles = folderToSearch.listFiles();
 
@@ -38,8 +43,16 @@ public class FileService {
                             .fileName(file.getName())
                             .fileSize(file.length())
                             .build();
+            List<String[]> rows = readCSV(file);
+            List<FileEventData> fileEventDataList = new ArrayList<>();
+            for (String[] row : rows) {
+                FileEventData fileEventData=  readRow(row[0]);
+                fileEventDataList.add(fileEventData);
+            }
+            fileDetail.setFileEventDataList(fileEventDataList);
             fileDetailList.add(fileDetail);
         }
+        System.out.println("fileDetailList" + fileDetailList);
         return fileDetailList;
     }
 
@@ -82,24 +95,41 @@ public class FileService {
 
     private static FileEventData readRow(String row) {
 
-        row = row.replaceAll("CheckIn:\t"," ");
-        row = row.replaceAll("\t"," ");
+        row = row.replaceAll("CheckIn:\t", " ");
+        row = row.replaceAll("\t", " ");
         String[] tabSeparateRow = row.split("=");
         Map<String, String> mapData = new HashMap<>();
         String oldKey = "";
-        for (int i =0 ; i< tabSeparateRow.length; i++) {
-            if (i == 0){
+        for (int i = 0; i < tabSeparateRow.length; i++) {
+            if (i == 0) {
                 oldKey = tabSeparateRow[i].trim();
             } else {
                 String value = tabSeparateRow[i];
                 int len = value.length();
-                if(value.split(" ").length > 1) {
-                    mapData.put(oldKey, value.substring(0, value.lastIndexOf(" ")+1));
-                    oldKey = value.substring(value.lastIndexOf(" "), len);
+                if (value.split(" ").length > 1) {
+                    mapData.put(oldKey, value.substring(0, value.lastIndexOf(" ") + 1));
+                    oldKey = value.substring(value.lastIndexOf(" ")+1, len);
                 }
             }
         }
-        FileEventData fileEventData =FileEventData.builder().mapData(mapData).build();
-        return  fileEventData;
+        FileEventData fileEventData = FileEventData.builder().mapData(mapData).build();
+        return fileEventData;
+    }
+
+    @SuppressWarnings("resource")
+    public List<String[]> readCSV(File file) {
+        CSVReader reader;
+        try {
+            reader = new CSVReader(new FileReader(file.getAbsolutePath()));
+            return reader.readAll();
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Exception: "+ e);
+        } catch (IOException e) {
+            System.out.println("Exception: "+ e);
+        } catch (CsvException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

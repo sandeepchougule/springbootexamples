@@ -42,6 +42,14 @@ class FileServiceTest extends Specification {
         firstEntry.get().value.toString().contains('secx_document');
     }
 
-
+    def "read entire file and create response object" () {
+        List<FileDetail> fileDetailList
+        when :
+        fileDetailList = fileService.readExtractedFiles()
+        then :
+        fileDetailList.size() > 0
+        fileDetailList.get(0).getFileName() == "SharePointEvents_5_10_2013.csv";
+        fileDetailList.get(0).getFileEventDataList().size() > 0
+    }
 
 }
