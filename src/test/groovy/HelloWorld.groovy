@@ -4,10 +4,6 @@ import spock.lang.Specification
 
 class HelloWorld extends Specification {
 
-    FileService fileService = new FileService();
-    def setup() {
-
-    }
 
     def "Test world" () {
         expect:
@@ -20,12 +16,6 @@ class HelloWorld extends Specification {
         0 | 0 || 0
     }
 
-    def "Upload a .zip file and validate it has .zip extension" () {
 
-        when :
-        FileUploadStatus fileUploadStatus =  fileService.processZipFile();
-        then :
-        fileUploadStatus.getStatus().equalsIgnoreCase("success")
-    }
 
 }
