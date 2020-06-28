@@ -1,12 +1,15 @@
 package com.sandeep.example.sandeep.files.service;
 
+import com.sandeep.example.sandeep.files.dto.FileEventData;
 import com.sandeep.example.sandeep.files.dto.FileUploadStatus;
 import com.sandeep.example.sandeep.files.entity.FileDetail.FileDetail;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -37,7 +40,6 @@ public class FileService {
                             .build();
             fileDetailList.add(fileDetail);
         }
-        System.out.println("fileDetailList:-"+fileDetailList);
         return fileDetailList;
     }
 
@@ -76,5 +78,28 @@ public class FileService {
             bos.write(bytesIn, 0, read);
         }
         bos.close();
+    }
+
+    private static FileEventData readRow(String row) {
+
+        row = row.replaceAll("CheckIn:\t"," ");
+        row = row.replaceAll("\t"," ");
+        String[] tabSeparateRow = row.split("=");
+        Map<String, String> mapData = new HashMap<>();
+        String oldKey = "";
+        for (int i =0 ; i< tabSeparateRow.length; i++) {
+            if (i == 0){
+                oldKey = tabSeparateRow[i].trim();
+            } else {
+                String value = tabSeparateRow[i];
+                int len = value.length();
+                if(value.split(" ").length > 1) {
+                    mapData.put(oldKey, value.substring(0, value.lastIndexOf(" ")+1));
+                    oldKey = value.substring(value.lastIndexOf(" "), len);
+                }
+            }
+        }
+        FileEventData fileEventData =FileEventData.builder().mapData(mapData).build();
+        return  fileEventData;
     }
 }
