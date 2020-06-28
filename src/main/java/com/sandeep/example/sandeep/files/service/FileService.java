@@ -1,25 +1,44 @@
 package com.sandeep.example.sandeep.files.service;
 
 import com.sandeep.example.sandeep.files.dto.FileUploadStatus;
+import com.sandeep.example.sandeep.files.entity.FileDetail.FileDetail;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import static java.util.Arrays.sort;
 
 @Service
 public class FileService {
     String destDir = "/opt/tmp/output";
     private static final int BUFFER_SIZE = 4096;
-    public FileUploadStatus processZipFile(String zipFilePath) throws IOException {
+    public FileUploadStatus extractZip(String zipFilePath) throws IOException {
         FileUploadStatus fileUploadStatus =
                 FileUploadStatus.builder().status("success").build();
         unzip(zipFilePath, destDir);
         return fileUploadStatus;
+    }
+
+    public List<FileDetail> readExtractedFiles() throws IOException {
+        List<FileDetail> fileDetailList = new ArrayList<>();
+        File folderToSearch = new File(destDir+"/inputFiles");
+
+        File[] inputFiles = folderToSearch.listFiles();
+
+        for (File file : inputFiles) {
+            FileDetail fileDetail =
+                    FileDetail.builder()
+                            .fileName(file.getName())
+                            .fileSize(file.length())
+                            .build();
+            fileDetailList.add(fileDetail);
+        }
+        System.out.println("fileDetailList:-"+fileDetailList);
+        return fileDetailList;
     }
 
 

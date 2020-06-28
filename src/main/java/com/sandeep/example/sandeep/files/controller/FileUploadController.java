@@ -21,6 +21,6 @@ public class FileUploadController extends BaseController {
     @RequestMapping(value = "/api/uploadfile", method = {RequestMethod.POST})
     @ResponseBody
     public FileUploadStatus fileUploadStatus(String zipFilePath) throws IOException {
-        return fileService.processZipFile(zipFilePath);
+        return fileService.extractZip(zipFilePath);
     }
 }
