@@ -78,20 +78,26 @@ class FileFilterServiceTest extends Specification {
 
     def "Top N files from the zip file content" () {
         given:
+   /*     List<FileEventData> fileEventDataList = new ArrayList<>();
+        FileEventData fileEventData =  FileEventData.builder().build();
+        fileEventDataList.add(fileEventData)*/
         FileDetail fileDetail1 =
                 FileDetail.builder()
                         .fileName("file1")
                         .fileSize(10)
+                .fileEventDataList(fileEventDataList)
                         .build();
         FileDetail fileDetail2 =
                 FileDetail.builder()
                         .fileName("file2")
                         .fileSize(20)
+                        .fileEventDataList(fileEventDataList)
                         .build();
         FileDetail fileDetail3 =
                 FileDetail.builder()
                         .fileName("file3")
                         .fileSize(12)
+                        .fileEventDataList(fileEventDataList)
                         .build();
         List<FileDetail> fileDetails = new ArrayList<>();
         fileDetails.add(fileDetail1);

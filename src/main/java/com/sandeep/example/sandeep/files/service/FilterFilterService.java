@@ -58,7 +58,7 @@ public class FilterFilterService {
                 .limit(limitN)
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
                         LinkedHashMap::new));
-
+        System.out.println("userNameSortedByCountAndLimit"+ userNameSortedByCountAndLimit);
 
         return userNameSortedByCountAndLimit;
     }
@@ -89,12 +89,13 @@ public class FilterFilterService {
 
         //Created a Comparator to compare by File Size as I don't see any other comparison field for file
         Comparator<FileDetail> byFileSize =
-                Comparator.comparing(FileDetail::getFileSize);
-
-        return fileDetails.stream().
+                Comparator.comparing(FileDetail::getFileRows);
+        Map<String, Long> dataReturn =  fileDetails.stream().
                 sorted(byFileSize.reversed()).
                 limit(limitN).
-                collect(Collectors.toMap(FileDetail::getFileName, FileDetail::getFileSize));
+                collect(Collectors.toMap(FileDetail::getFileName, FileDetail::getFileRows));
+        System.out.println("dataReturn:->"+dataReturn);
+        return dataReturn;
 
     }
 }
