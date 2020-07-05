@@ -98,4 +98,42 @@ public class FilterFilterService {
         return dataReturn;
 
     }
+
+
+    /**
+     * Returns the trend of activity
+     * This is just to avoid using DB and return data with files read
+     *
+     * @return      long [][] trend of activity by date
+     */
+    public long [][] readTempFilesAndReturnTrend() throws IOException {
+
+        List<FileDetail> fileDetailList = fileService.readExtractedFiles();
+        List<FileEventData> fileEventData = fileDetailList.parallelStream().
+                flatMap(t -> t.getFileEventDataList().stream()).collect(Collectors.toList());
+        return trendOfActivity(fileEventData);
+    }
+
+    public long [][] trendOfActivity(List<FileEventData> fileEventData) {
+        System.out.println("Started");
+        Map<Long, Long> timeStartSeries;
+        long [][] dateAndRepeatValues = new long[0][0];
+        try {
+            //Here grouping by getStartTime and counting the values
+
+            timeStartSeries = fileEventData.parallelStream().collect(
+                    groupingBy(FileEventData::getStartTime, counting()));
+
+            dateAndRepeatValues = new long[timeStartSeries.size()][2];
+            int counter=0;
+            for (Map.Entry<Long, Long> entry : timeStartSeries.entrySet()){
+                dateAndRepeatValues[counter][0] = entry.getKey();
+                dateAndRepeatValues[counter][1] = entry.getValue();
+                counter++;
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dateAndRepeatValues;
+    }
 }

@@ -28,4 +28,12 @@ public class WidgetsController extends BaseController {
         return filterFilterService.readTempFilesAndReturnTopNFiles(topLimit);
     }
 
+    @RequestMapping(value = "/api/activitiy/trend", method = {RequestMethod.GET})
+    @ResponseBody
+    public long [][]  trendOfActivity() throws IOException {
+        return filterFilterService.readTempFilesAndReturnTrend();
+    }
+
+
+
 }

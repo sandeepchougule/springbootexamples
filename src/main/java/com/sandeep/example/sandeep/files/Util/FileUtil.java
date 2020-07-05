@@ -1,6 +1,8 @@
 package com.sandeep.example.sandeep.files.Util;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -41,5 +43,18 @@ public class FileUtil {
             bos.write(bytesIn, 0, read);
         }
         bos.close();
+    }
+
+    public static String getDateTimeByPosition(String dateTime, int index) {
+        String[] dateSplit = dateTime.split(" ");
+        String newDate = dateSplit[0].concat(" ").concat(dateSplit[index]);
+        return newDate;
+    }
+
+
+
+    public static Long dateTime(String dateTime) {
+
+        return null;
     }
 }

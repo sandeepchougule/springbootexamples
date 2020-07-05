@@ -6,8 +6,21 @@
 <body>
 <div id="topNUsernames" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
 <div id="topNFileNames" style="height: 370px; max-width: 920px; margin: 100px auto;"></div>
+<div id="activityByHour"></div>
+<div id="container" style="height: 400px; min-width: 310px"></div>
+
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/data.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+
+
+
+
+
 </body>
 <script>
     function sortData(dataNUserDataPoints) {
@@ -22,6 +35,34 @@
     }
 
     window.onload = function () {
+
+        var dataMy  = [[1530624600000, 56], [1530797400000, 156]];
+
+
+        Highcharts.getJSON('http://localhost:8080/api/activitiy/trend', function (data) {
+            // Create the chart
+            Highcharts.stockChart('container', {
+
+
+                rangeSelector: {
+                    selected: 1
+                },
+
+                title: {
+                    text: 'Activity Trend'
+                },
+
+                series: [{
+                    name: 'User Logged In',
+                    data: data,
+                    tooltip: {
+                        valueDecimals: 2
+                    }
+                }]
+            });
+        });
+
+
 
         var dataNUserDataPoints = [];
 
