@@ -1,5 +1,3 @@
-import com.sandeep.example.sandeep.files.dto.FileUploadStatus
-import com.sandeep.example.sandeep.files.service.FileService
 import spock.lang.Specification
 
 class HelloWorld extends Specification {

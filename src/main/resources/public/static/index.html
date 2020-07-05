@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+</head>
+<body>
+
+<table width="100%">
+    <tr>
+        <td><div id="topNUsernames" style="height: 270px; max-width: 420px; "></div></td>
+        <td><div id="topNFileNames" style="height: 270px; max-width: 420px;"></div></td>
+
+    </tr>
+    <tr>
+        <td colspan="2"><div id="activityByHour" style="height: 400px; min-width: 310px"></div></td>
+
+
+    </tr>
+</table>
+
+<section>
+    <div>
+
+
+    </div>
+</section>
+
+
+
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/data.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+
+
+
+
+
+</body>
+<script>
+    function sortData(dataNUserDataPoints) {
+        dataNUserDataPoints.sort(function(a, b){
+            var keyA = a.y,
+                keyB = b.y;
+            // Compare the 2 dates
+            if(keyA > keyB) return -1;
+            if(keyA < keyB) return 1;
+            return 0;
+        });
+    }
+
+    window.onload = function () {
+
+        var dataMy  = [[1530624600000, 56], [1530797400000, 156]];
+
+
+        Highcharts.getJSON('http://localhost:8080/api/activitiy/trend', function (data) {
+            // Create the chart
+            Highcharts.stockChart('activityByHour', {
+
+
+                rangeSelector: {
+                    selected: 1
+                },
+
+                title: {
+                    text: 'Activity Trend'
+                },
+
+                series: [{
+                    name: 'User Logged In',
+                    data: data,
+                    tooltip: {
+                        valueDecimals: 2
+                    }
+                }]
+            });
+        });
+
+
+
+        var dataNUserDataPoints = [];
+
+        var userChart = new CanvasJS.Chart("topNUsernames",{
+            animationEnabled: true,
+            theme: "light2",
+            title:{
+                text:"Top 5 Usernames"
+            },
+            axisY: {
+                title: "Appeared (Numbers)"
+            },
+            data: [{
+                type: "column",
+                showInLegend: true,
+                legendMarkerColor: "grey",
+                legendText: "User appeared",
+                dataPoints : dataNUserDataPoints,
+            }]
+        });
+        $.getJSON("http://localhost:8080/api/top/users?topLimit=5", function(data) {
+            console.log( "data: before", JSON.stringify(data) );
+            $.each(data, function(key, value){
+               // console.log( "key:", JSON.stringify(key) );
+                 dataNUserDataPoints.push({label: key, y: parseInt(value)});
+            });
+            console.log( "dataNUserDataPoints after:", JSON.stringify(dataNUserDataPoints) );
+            sortData(dataNUserDataPoints)
+            userChart.render();
+        });
+
+        var dataNFilenameDataPoints = [];
+        var fileChart = new CanvasJS.Chart("topNFileNames",{
+            animationEnabled: true,
+            theme: "light2",
+            title:{
+                text:"Top 5 File Names"
+            },
+            axisY: {
+                title: "Appeared (Numbers)"
+            },
+            data: [{
+                type: "column",
+                showInLegend: true,
+                legendMarkerColor: "blue",
+                legendText: "Files",
+                dataPoints : dataNFilenameDataPoints,
+            }]
+        });
+        $.getJSON("http://localhost:8080/api/top/files?topLimit=5", function(data) {
+            $.each(data, function(key, value){
+                dataNFilenameDataPoints.push({label: key, y: parseInt(value)});
+            });
+            sortData(dataNFilenameDataPoints)
+            fileChart.render();
+        });
+    }
+</script>
+</html>
