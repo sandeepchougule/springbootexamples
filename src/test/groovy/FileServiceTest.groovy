@@ -2,7 +2,6 @@ import com.sandeep.example.sandeep.files.dto.FileEventData
 import com.sandeep.example.sandeep.files.dto.FileUploadStatus
 import com.sandeep.example.sandeep.files.entity.FileDetail.FileDetail
 import com.sandeep.example.sandeep.files.service.FileService
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class FileServiceTest extends Specification {

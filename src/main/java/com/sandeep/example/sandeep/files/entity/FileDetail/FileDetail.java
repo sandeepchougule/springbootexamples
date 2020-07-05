@@ -7,7 +7,6 @@ import lombok.ToString;
 import lombok.experimental.Tolerate;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.Entity;
 import java.util.List;
 
 //@Entity

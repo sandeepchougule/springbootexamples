@@ -1,7 +1,6 @@
 package com.sandeep.example.sandeep.core;
 
 import com.sandeep.example.sandeep.core.dto.ErrorResponse;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
