@@ -1,0 +1,34 @@
+package com.sandeep.example.sandeep.files.controller;
+
+
+import com.sandeep.example.sandeep.core.BaseController;
+import com.sandeep.example.sandeep.files.dto.FileUploadStatus;
+import com.sandeep.example.sandeep.files.entity.FileDetail.FileDetail;
+import com.sandeep.example.sandeep.files.service.FileService;
+import com.sandeep.example.sandeep.files.service.FilterFilterService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+public class WidgetsController extends BaseController {
+
+    @Autowired
+    FilterFilterService filterFilterService;
+
+    @RequestMapping(value = "/api/top/users}", method = {RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Long> topNUsers(@RequestParam("topLimit") int topLimit) throws IOException {
+        return filterFilterService.readTempFilesAndReturnTopNUsers(topLimit);
+    }
+
+    @RequestMapping(value = "/api/top/files}", method = {RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Long> topNFiles(@RequestParam("topLimit") int topLimit) throws IOException {
+        return filterFilterService.readTempFilesAndReturnTopNFiles(topLimit);
+    }
+
+}

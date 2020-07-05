@@ -17,10 +17,12 @@ public class FileDetail {
 
     private int fileId;
     private String fileName;
-    private long fileSize;
+    private Long fileSize;
     private List<FileEventData> fileEventDataList;
 
     @Tolerate
     public FileDetail() {
     }
+
+
 }

@@ -8,14 +8,10 @@ import spock.lang.Specification
 class FileFilterServiceTest extends Specification {
 
     FilterFilterService filterFilterService = new FilterFilterService();
+    List<FileEventData> fileEventDataList = new ArrayList<>();
+    FileService fileService = new FileService();
     def setup() {
-
-    }
-
-
-
-    def "Top N users from the list" () {
-        List<FileEventData> fileEventDataList = new ArrayList<>();
+        filterFilterService = new FilterFilterService(fileService: fileService);
         Map<String, String> mapData1 = new HashMap<>();
         mapData1.put("USER_NAME", "sandeep");
         FileEventData fileEventData1= FileEventData.builder()
@@ -54,13 +50,61 @@ class FileFilterServiceTest extends Specification {
                 .mapData(mapData5)
                 .build();
         fileEventDataList.add(fileEventData5);
+    }
+
+
+
+    def "Top N users from the list" () {
+
         when :
-        List<String> top2Users = filterFilterService.getTopNUsers(fileEventDataList,2);
+        Map<String, Long> top2Users = filterFilterService.getTopNUsers(fileEventDataList,2);
 
         then :
-        top2Users.get(0) == 'Akshay'
-        top2Users.get(1) == 'sandeep'
+        top2Users.size() == 2 //Checking map has max 2 elements
+        top2Users.entrySet().stream().findFirst().get().key == 'Akshay' //Checking first element is always Akshay as per data set provided
 
     }
 
+    def "Top N users from the zip file content" () {
+
+        when :
+        Map<String, Long> top2Users = filterFilterService.readTempFilesAndReturnTopNUsers(2);
+
+        then :
+        //This is added based on files provided
+        top2Users.entrySet().stream().findFirst().get().key == '1142'
+
+    }
+
+    def "Top N files from the zip file content" () {
+        given:
+        FileDetail fileDetail1 =
+                FileDetail.builder()
+                        .fileName("file1")
+                        .fileSize(10)
+                        .build();
+        FileDetail fileDetail2 =
+                FileDetail.builder()
+                        .fileName("file2")
+                        .fileSize(20)
+                        .build();
+        FileDetail fileDetail3 =
+                FileDetail.builder()
+                        .fileName("file3")
+                        .fileSize(12)
+                        .build();
+        List<FileDetail> fileDetails = new ArrayList<>();
+        fileDetails.add(fileDetail1);
+        fileDetails.add(fileDetail2);
+        fileDetails.add(fileDetail3);
+
+        when :
+        Map<String, Long> top2Files = filterFilterService.getTopNFiles(fileDetails,2);
+
+        then :
+        //This is added based on files provided
+        top2Files.size() == 2
+        top2Files.entrySet().stream().findFirst().get().key == 'file2'
+
+    }
 }
