@@ -12,52 +12,6 @@
 
 
     window.onload = function () {
-        var top5Users = [];
-        $.ajax({
-            url: "http://localhost:8080/api/top/users?topLimit=5",
-            beforeSend: function( xhr ) {
-                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-            }
-        })
-            .done(function( data ) {
-                if ( console && console.log ) {
-                    console.log( "Sample of data:", data );
-
-
-                    var temp = {};
-                    temp.y = 1
-                    temp.label = 'sadeep'
-                    console.log( "temp:", temp );
-                    top5Users.push(temp)
-                    console.log( "top5Users:", JSON.stringify(top5Users) );
-                }
-            });
-
-        /*var chart = new CanvasJS.Chart("chartContainer", {
-            animationEnabled: true,
-            theme: "light2", // "light1", "light2", "dark1", "dark2"
-            title:{
-                text: "Top Oil Reserves"
-            },
-            axisY: {
-                title: "Reserves(MMbbl)"
-            },
-            data: [{
-                type: "column",
-                showInLegend: true,
-                legendMarkerColor: "grey",
-                legendText: "MMbbl = one million barrels",
-                dataPoints: [
-                        { y: 30, label: "Venezuela" },
-                        { y: 10,  label: "Saudi" },
-                        { y: 20,  label: "Canada" },
-                        { y: 100,  label: "Iran" },
-                    ]
-
-            }]
-        });
-        chart.render();*/
-
 
         var dataPoints = [];
         var chart = new CanvasJS.Chart("chartContainer",{

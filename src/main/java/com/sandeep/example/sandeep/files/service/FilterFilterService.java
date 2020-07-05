@@ -48,7 +48,6 @@ public class FilterFilterService {
         Map<String, Long> userNameGroupByCount;
         userNameGroupByCount = fileEventDataList.parallelStream().collect(
                 groupingBy(FileEventData::getUserName, counting()));
-        System.out.println("userNameAndCount:->" + userNameGroupByCount);
 
         //Then sorting the map in reverse order and fetch the specified limit
 
@@ -59,7 +58,6 @@ public class FilterFilterService {
                 .limit(limitN)
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
                         LinkedHashMap::new));
-        System.out.println("userNameSortedByCountAndLimit:->" + userNameSortedByCountAndLimit);
 
 
         return userNameSortedByCountAndLimit;
