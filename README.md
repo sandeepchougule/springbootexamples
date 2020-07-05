@@ -34,3 +34,7 @@ To run the project
  String zipFilePath = "/opt/tmp/input/inputFiles.zip"
 Extract of files are
  String destDir = "/opt/tmp/output";
+ 
+ Output
+ ![Image of Dashboard after file processed]( https://github.com/sandeepchougule/springbootexamples/blob/file_process/src/main/resources/dashboard.png)
+
