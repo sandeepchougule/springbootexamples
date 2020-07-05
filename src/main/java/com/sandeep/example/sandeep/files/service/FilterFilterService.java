@@ -121,7 +121,7 @@ public class FilterFilterService {
         try {
             //Here grouping by getStartTime and counting the values
 
-            timeStartSeries = fileEventData.parallelStream().collect(
+            timeStartSeries = fileEventData.parallelStream().filter(t -> t.getStartTime() != null ).collect(
                     groupingBy(FileEventData::getStartTime, counting()));
 
             dateAndRepeatValues = new long[timeStartSeries.size()][2];

@@ -75,15 +75,12 @@ class FileFilterServiceTest extends Specification {
 
         then :
         //This is added based on files provided
-        top2Users.entrySet().stream().findFirst().get().key == '1142'
+        top2Users.entrySet().stream().findFirst().get().key == '1243'
 
     }
 
     def "Top N files from the zip file content" () {
         given:
-   /*     List<FileEventData> fileEventDataList = new ArrayList<>();
-        FileEventData fileEventData =  FileEventData.builder().build();
-        fileEventDataList.add(fileEventData)*/
         FileDetail fileDetail1 =
                 FileDetail.builder()
                         .fileName("file1")
