@@ -49,8 +49,9 @@ class FileServiceTest extends Specification {
         FileEventData fileEventData = fileService.readRow(row)
         then :
         Optional<Map.Entry<String, String>> firstEntry =     fileEventData.getMapData().entrySet().stream().findFirst();
-        firstEntry.get().key.toString().contains('OBJECT_TYPE')
-        firstEntry.get().value.toString().contains('secx_document');
+        System.out.println("firstEntry"+firstEntry)
+        firstEntry.get().key.toString().contains('APPLICATIONNAME')
+        firstEntry.get().value.toString().contains('SECX-SHARE');
     }
 
     def "read entire file and create response object" () {

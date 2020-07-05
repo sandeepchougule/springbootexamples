@@ -36,13 +36,17 @@ public class FileUtil {
     }
 
     private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
-        byte[] bytesIn = new byte[BUFFER_SIZE];
-        int read = 0;
-        while ((read = zipIn.read(bytesIn)) != -1) {
-            bos.write(bytesIn, 0, read);
+        System.out.println("filePath:-"+filePath);
+        if(!filePath.contains("._")) {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
+            byte[] bytesIn = new byte[BUFFER_SIZE];
+            int read = 0;
+            while ((read = zipIn.read(bytesIn)) != -1) {
+                bos.write(bytesIn, 0, read);
+            }
+            bos.close();
         }
-        bos.close();
+
     }
 
     public static String getDateTimeByPosition(String dateTime, int index) {

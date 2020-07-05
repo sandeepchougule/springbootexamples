@@ -124,7 +124,7 @@ class FileFilterServiceTest extends Specification {
         DateUtil.dateTime(startDateTime);
 
         then :
-        startDateTime == '5/10/2013 0:20:48';
+        startDateTime == '5/16/2013 11:34:13';
 
     }
 
