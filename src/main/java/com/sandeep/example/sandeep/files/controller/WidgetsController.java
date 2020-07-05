@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class WidgetsController extends BaseController {
 
     @Autowired
