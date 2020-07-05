@@ -22,7 +22,6 @@ public class DateUtil {
         formatter.setLenient(false);
         try {
             Date date = formatter.parse(dateTime);
-            System.out.println("dateTime returned:-->"+date.getTime());
             return date.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
