@@ -35,7 +35,6 @@ public class FileEventData {
 
     public Long getStartTime() {
         if(mapData.containsKey("DATETIME") ){
-
             return DateUtil.dateTime(DateUtil.getDateTimeByPosition(mapData.get("DATETIME"), 1)) ;
         }
         return null;

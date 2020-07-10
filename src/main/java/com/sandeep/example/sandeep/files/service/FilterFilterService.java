@@ -83,11 +83,11 @@ public class FilterFilterService {
      *
      * @param  fileDetails  The File data to filter from
      * @param  limitN The limit of top File you want to find
-     * @return      Map<String, Long> File with top count sorted by max file size
+     * @return      Map<String, Long> File with top count sorted by max file Rows
      */
     public Map<String, Long> getTopNFiles(List<FileDetail> fileDetails, Integer limitN) {
 
-        //Created a Comparator to compare by File Size as I don't see any other comparison field for file
+        //Created a Comparator to compare by File Rows as I don't see any other comparison field for file
         Comparator<FileDetail> byFileSize =
                 Comparator.comparing(FileDetail::getFileRows);
         Map<String, Long> dataReturn =  fileDetails.stream().
@@ -124,9 +124,18 @@ public class FilterFilterService {
             timeStartSeries = fileEventData.parallelStream().filter(t -> t.getStartTime() != null ).collect(
                     groupingBy(FileEventData::getStartTime, counting()));
 
-            dateAndRepeatValues = new long[timeStartSeries.size()][2];
+
+            Map<Long, Long> orderByStartTime;
+            orderByStartTime = timeStartSeries.entrySet()
+                    .stream()
+                    .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                    .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
+                            LinkedHashMap::new));
+
+
+            dateAndRepeatValues = new long[orderByStartTime.size()][2];
             int counter=0;
-            for (Map.Entry<Long, Long> entry : timeStartSeries.entrySet()){
+            for (Map.Entry<Long, Long> entry : orderByStartTime.entrySet()){
                 dateAndRepeatValues[counter][0] = entry.getKey();
                 dateAndRepeatValues[counter][1] = entry.getValue();
                 counter++;
